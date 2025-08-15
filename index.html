@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generation Labz - AI Creation Portal</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #0ea5e9, #06b6d4, #f97316, #eab308, #10b981);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating geometric shapes */
+        .floating-shapes {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            border-radius: 20px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+            transform: rotate(45deg);
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            border-radius: 50%;
+            top: 60%;
+            right: 15%;
+            animation-delay: 5s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            top: 30%;
+            left: 70%;
+            animation-delay: 10s;
+        }
+
+        .shape:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            border-radius: 20px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 15s;
+            transform: rotate(30deg);
+        }
+
+        .shape:nth-child(5) {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, #ffffff, #f0f9ff);
+            border-radius: 50%;
+            top: 15%;
+            right: 30%;
+            animation-delay: 8s;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+                opacity: 0.1;
+            }
+            25% {
+                transform: translateY(-30px) translateX(20px) rotate(90deg);
+                opacity: 0.2;
+            }
+            50% {
+                transform: translateY(-60px) translateX(-20px) rotate(180deg);
+                opacity: 0.15;
+            }
+            75% {
+                transform: translateY(-30px) translateX(30px) rotate(270deg);
+                opacity: 0.25;
+            }
+        }
+
+        /* Wave animation */
+        .wave-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            clip-path: polygon(0 60%, 25% 40%, 50% 60%, 75% 30%, 100% 50%, 100% 100%, 0% 100%);
+            animation: waveMove 12s ease-in-out infinite;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: -2s;
+            opacity: 0.5;
+            clip-path: polygon(0 80%, 25% 60%, 50% 80%, 75% 50%, 100% 70%, 100% 100%, 0% 100%);
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: -4s;
+            opacity: 0.3;
+            clip-path: polygon(0 70%, 25% 50%, 50% 70%, 75% 40%, 100% 60%, 100% 100%, 0% 100%);
+        }
+
+        @keyframes waveMove {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0%); }
+        }
+
+        .main-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(5px);
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px 20px 20px;
+        }
+
+        .main-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 1rem;
+            letter-spacing: -2px;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% { 
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+                transform: scale(1);
+            }
+            100% { 
+                text-shadow: 0 0 50px rgba(255, 255, 255, 0.5);
+                transform: scale(1.02);
+            }
+        }
+
+        .main-tagline {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.5rem;
+            animation: slideUp 1s ease-out 0.3s both;
+        }
+
+        .portal-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .app-section {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            animation: slideUp 1s ease-out 0.7s both;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .app-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+        }
+
+        .app-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 4s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .app-logo-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 1.5rem auto;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            border-radius: 15px;
+        }
+
+        .app-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .app-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+        }
+
+        .launch-section {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .launch-date {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .launch-subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .enter-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+            color: #ffffff;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enter-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.2));
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .enter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .enter-btn:hover::before {
+            left: 100%;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            animation: slideUp 1s ease-out 1.5s both;
+        }
+
+        .footer a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-logo {
+                font-size: 2.5rem;
+            }
+            
+            .main-tagline {
+                font-size: 1.1rem;
+            }
+            
+            .portal-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .app-section {
+                padding: 1.5rem;
+            }
+
+            .shape {
+                transform: scale(0.7);
+            }
+
+            .app-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Dark mode adjustments */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(-45deg, #0f172a, #1e293b, #374151, #4b5563, #6b7280);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="wave-container">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+    </div>
+
+    <div class="main-container">
+        <div class="header">
+            <h1 class="main-logo">Generation Labz</h1>
+            <div class="main-tagline">Your Gateway to AI-Powered Creativity</div>
+        </div>
+
+        <div class="portal-container">
+            <div class="portal-grid">
+                <!-- Pixel Labz Section -->
+                <div class="app-section" onclick="launchPixelLabz()">
+                    <div class="app-logo-container">
+                        <img src="pixlogo.png" alt="Pixel Labz Logo" class="app-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <div style="display: none; width: 80px; height: 80px; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); border-radius: 15px;">
+                            <svg width="40" height="40" fill="white" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <h2 class="app-title">Pixel Labz</h2>
+                    <div class="app-subtitle">AI Image Generation Studio</div>
+                    
+                    <div class="launch-section">
+                        <div class="launch-date">October 2024</div>
+                        <div class="launch-subtitle">Expected Launch</div>
+                    </div>
+                    
+                    <button class="enter-btn">
+                        Enter Pixel Labz
+                        <span style="margin-left: 8px;">→</span>
+                    </button>
+                </div>
+
+                <!-- 3Dream Labz Section -->
+                <div class="app-section" onclick="launch3DreamLabz()">
+                    <div class="app-logo-container">
+                        <img src="3dlabz.png" alt="3Dream Labz Logo" class="app-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+                        <div style="display: none; width: 80px; height: 80px; align-items: center; justify-content: center; background: rgba(255,255,255,0.2); border-radius: 15px;">
+                            <svg width="40" height="40" fill="none" stroke="white" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <h2 class="app-title">3Dream Labz</h2>
+                    <div class="app-subtitle">AI 3D Model Generator</div>
+                    
+                    <div class="launch-section">
+                        <div class="launch-date">Late September 2024</div>
+                        <div class="launch-subtitle">Expected Launch</div>
+                    </div>
+                    
+                    <button class="enter-btn">
+                        Enter 3Dream Labz
+                        <span style="margin-left: 8px;">→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; 2024 Generation Labz. Powered by AI Innovation.
+        </div>
+    </div>
+
+    <script>
+        // Dark mode detection
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Add parallax effect to shapes
+        document.addEventListener('mousemove', (e) => {
+            const shapes = document.querySelectorAll('.shape');
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            shapes.forEach((shape, index) => {
+                const speed = (index + 1) * 0.5;
+                const x = (mouseX - 0.5) * speed * 20;
+                const y = (mouseY - 0.5) * speed * 20;
+                
+                shape.style.transform += ` translate(${x}px, ${y}px)`;
+            });
+        });
+
+        function launchPixelLabz() {
+            window.open('https://pixel-labz.vercel.app', '_blank');
+        }
+
+        function launch3DreamLabz() {
+            window.open('https://3dream.vercel.app', '_blank');
+        }
+    </script>
+</body>
+</html>
